@@ -14,7 +14,8 @@ const adminLinks = [
   { label: "Settings", href: "/admin/settings", icon: <Settings className="h-5 w-5" /> },
 ];
 
-const COLORS = ["#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe"];
+// Orange-based palette using primary accent #F9622C and lighter tints
+const COLORS = ["#F9622C", "#FF7F50", "#FFB28A", "#FFD9C9", "#FFF2EC"];
 
 export default function AdminDashboard() {
   const totalSales = mockAgents.reduce((sum, agent) => sum + agent.totalSales, 0);
@@ -32,23 +33,23 @@ export default function AdminDashboard() {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="border-l-4 border-l-primary">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Sales</CardTitle>
-              <DollarSign className="h-4 w-4 text-primary" />
+              <DollarSign className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${totalSales.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">${totalSales.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                <span className="text-green-600">+12.5%</span> from last month
+                <span className="text-[#F9622C]">+12.5%</span> from last month
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-500">
+          <Card className="border-l-4 border-l-[#F9622C]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Closed Deals</CardTitle>
-              <Target className="h-4 w-4 text-blue-500" />
+              <Target className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{totalDeals}</div>
@@ -58,23 +59,23 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-400">
+                    <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Agents</CardTitle>
-              <Users className="h-4 w-4 text-blue-400" />
+              <Users className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{activeAgents}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">{activeAgents}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                {mockAgents.length} total agents
+                <span className="text-[#F9622C]">-2</span> from last week
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-300">
+          <Card className="border-l-4 border-l-[#F9622C]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Avg Rating</CardTitle>
-              <Award className="h-4 w-4 text-blue-300" />
+              <Award className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{avgRating} / 5.0</div>
@@ -91,7 +92,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
+                <TrendingUp className="h-5 w-5 text-[#F9622C]" />
                 Sales Trend (6 Months)
               </CardTitle>
             </CardHeader>
@@ -102,7 +103,7 @@ export default function AdminDashboard() {
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
-                  <Line type="monotone" dataKey="sales" stroke="#3b82f6" strokeWidth={2} />
+                  <Line type="monotone" dataKey="sales" stroke="#F9622C" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -112,7 +113,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
+                <Target className="h-5 w-5 text-[#F9622C]" />
                 Lead Status Distribution
               </CardTitle>
             </CardHeader>
@@ -128,9 +129,9 @@ export default function AdminDashboard() {
                     outerRadius={100}
                     label
                   >
-                    {leadStatusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
+                      {leadStatusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
                   </Pie>
                   <Tooltip />
                   <Legend />
@@ -143,7 +144,7 @@ export default function AdminDashboard() {
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" />
+                <Users className="h-5 w-5 text-[#F9622C]" />
                 Agent Performance Overview
               </CardTitle>
             </CardHeader>
@@ -155,8 +156,8 @@ export default function AdminDashboard() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="sales" fill="#3b82f6" name="Total Sales ($)" />
-                  <Bar dataKey="deals" fill="#60a5fa" name="Closed Deals" />
+                  <Bar dataKey="sales" fill="#F9622C" name="Total Sales ($)" />
+                  <Bar dataKey="deals" fill="#FF7F50" name="Closed Deals" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

@@ -79,7 +79,7 @@ export default function AgentReportsPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+          <Card className="bg-gradient-to-br from-[#F9622C] to-[#FF7F50] text-white">
             <CardHeader>
               <CardTitle className="text-white/90 text-sm flex items-center gap-2">
                 <Briefcase className="h-4 w-4" />
@@ -92,7 +92,7 @@ export default function AgentReportsPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+          <Card className="bg-gradient-to-br from-[#F9622C] to-[#FF7F50] text-white">
             <CardHeader>
               <CardTitle className="text-white/90 text-sm flex items-center gap-2">
                 <Award className="h-4 w-4" />
@@ -119,8 +119,8 @@ export default function AgentReportsPage() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="sales" fill="#3b82f6" name="Actual Sales" />
-                <Bar dataKey="target" fill="#93c5fd" name="Target" />
+                <Bar dataKey="sales" fill="#F9622C" name="Actual Sales" />
+                <Bar dataKey="target" fill="#ffa07a" name="Target" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

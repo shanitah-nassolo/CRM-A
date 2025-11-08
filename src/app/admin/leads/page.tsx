@@ -56,31 +56,31 @@ export default function LeadsPage() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <Card>
             <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-bold text-blue-600">15</div>
+              <div className="text-2xl font-bold text-[#F9622C]">15</div>
               <p className="text-sm text-muted-foreground mt-1">New</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-bold text-yellow-600">23</div>
+              <div className="text-2xl font-bold text-[#F9622C]">23</div>
               <p className="text-sm text-muted-foreground mt-1">Contacted</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-bold text-purple-600">18</div>
+              <div className="text-2xl font-bold text-[#F9622C]">18</div>
               <p className="text-sm text-muted-foreground mt-1">Qualified</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-bold text-green-600">12</div>
+              <div className="text-2xl font-bold text-[#F9622C]">12</div>
               <p className="text-sm text-muted-foreground mt-1">Converted</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-bold text-red-600">8</div>
+              <div className="text-2xl font-bold text-[#F9622C]">8</div>
               <p className="text-sm text-muted-foreground mt-1">Lost</p>
             </CardContent>
           </Card>

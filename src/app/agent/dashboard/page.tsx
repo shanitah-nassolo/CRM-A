@@ -47,11 +47,11 @@ export default function AgentDashboard() {
         </div>
 
         {/* Performance Rating Card */}
-        <Card className="bg-gradient-to-br from-primary to-blue-600 text-white">
+        <Card className="relative overflow-hidden">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-white/80 mb-2">Your Performance Rating</p>
+                <p className="text-[#F9622C] mb-2 font-medium">Your Performance Rating</p>
                 <div className="flex items-center gap-3">
                   <div className="text-5xl font-bold">{myRating}</div>
                   <div>
@@ -78,52 +78,52 @@ export default function AgentDashboard() {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="border-l-4 border-l-primary">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Sales</CardTitle>
-              <DollarSign className="h-4 w-4 text-primary" />
+              <DollarSign className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${totalSales.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">${totalSales.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                <span className="text-green-600">+15%</span> from last month
+                <span className="text-[#F9622C]">+15%</span> from last month
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-500">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Closed Deals</CardTitle>
-              <Target className="h-4 w-4 text-blue-500" />
+              <Target className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{closedDeals.length}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">{closedDeals.length}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 <span className="text-green-600">+2</span> this month
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-400">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Deals</CardTitle>
-              <Briefcase className="h-4 w-4 text-blue-400" />
+              <Briefcase className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{activeDeals}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">{activeDeals}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 In pipeline
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-300">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Win Rate</CardTitle>
-              <TrendingUp className="h-4 w-4 text-blue-300" />
+              <TrendingUp className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">75%</div>
+              <div className="text-2xl font-bold text-[#F9622C]">75%</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Above average
               </p>
@@ -137,7 +137,7 @@ export default function AgentDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
+                <TrendingUp className="h-5 w-5 text-[#F9622C]" />
                 My Sales Trend (6 Months)
               </CardTitle>
             </CardHeader>
@@ -148,7 +148,7 @@ export default function AgentDashboard() {
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
-                  <Line type="monotone" dataKey="sales" stroke="#3b82f6" strokeWidth={2} />
+                  <Line type="monotone" dataKey="sales" stroke="#F9622C" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -158,7 +158,7 @@ export default function AgentDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
+                <Target className="h-5 w-5 text-[#F9622C]" />
                 Weekly Activity
               </CardTitle>
             </CardHeader>
@@ -169,8 +169,8 @@ export default function AgentDashboard() {
                   <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="calls" fill="#3b82f6" name="Calls" />
-                  <Bar dataKey="emails" fill="#60a5fa" name="Emails" />
+                  <Bar dataKey="calls" fill="#F9622C" name="Calls" />
+                  <Bar dataKey="emails" fill="#ffa07a" name="Emails" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -191,12 +191,12 @@ export default function AgentDashboard() {
                     <div className="text-sm text-muted-foreground">{deal.client}</div>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-primary">${deal.value.toLocaleString()}</div>
+                    <div className="font-bold text-[#F9622C]">${deal.value.toLocaleString()}</div>
                     <div className={`text-xs px-2 py-1 rounded mt-1 inline-block ${
-                      deal.status === "closed" ? "bg-green-100 text-green-700" :
-                      deal.status === "proposal" ? "bg-blue-100 text-blue-700" :
-                      deal.status === "negotiation" ? "bg-yellow-100 text-yellow-700" :
-                      "bg-red-100 text-red-700"
+                      deal.status === "closed" ? "bg-[#F9622C]/10 text-[#F9622C]" :
+                      deal.status === "proposal" ? "bg-[#F9622C]/10 text-[#F9622C]" :
+                      deal.status === "negotiation" ? "bg-[#F9622C]/10 text-[#F9622C]" :
+                      "bg-[#F9622C]/10 text-[#F9622C]"
                     }`}>
                       {deal.status.charAt(0).toUpperCase() + deal.status.slice(1)}
                     </div>

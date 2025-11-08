@@ -77,7 +77,7 @@ export default function ReportsPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+          <Card className="bg-gradient-to-br from-[#F9622C] to-[#FF7F50] text-white">
             <CardHeader>
               <CardTitle className="text-white/90 text-sm">Active Pipelines</CardTitle>
             </CardHeader>

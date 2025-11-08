@@ -114,32 +114,32 @@ export default function ActivitiesPage() {
           <Card className="border-l-4 border-l-primary">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">People Met</CardTitle>
-              <UserCheck className="h-4 w-4 text-primary" />
+              <UserCheck className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totals.peopleMet}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">{totals.peopleMet}</div>
               <p className="text-xs text-muted-foreground mt-1">Total this period</p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-500">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Meetings Scheduled</CardTitle>
-              <Calendar className="h-4 w-4 text-blue-500" />
+              <Calendar className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totals.meetingsScheduled}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">{totals.meetingsScheduled}</div>
               <p className="text-xs text-muted-foreground mt-1">Total this period</p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-green-500">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Deals Closed</CardTitle>
-              <Handshake className="h-4 w-4 text-green-500" />
+              <Handshake className="h-4 w-4 text-[#F9622C]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totals.dealsClosed}</div>
+              <div className="text-2xl font-bold text-[#F9622C]">{totals.dealsClosed}</div>
               <p className="text-xs text-muted-foreground mt-1">Total this period</p>
             </CardContent>
           </Card>
