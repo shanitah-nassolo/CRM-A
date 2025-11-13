@@ -101,7 +101,27 @@ export default function LoginPage() {
                 Forgot password?
               </button>
             </div>
-            {/* Role selection removed - default role remains 'admin' */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Login as</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  type="button"
+                  variant={role === "admin" ? "default" : "outline"}
+                  onClick={() => setRole("admin")}
+                  className="w-full"
+                >
+                  Admin
+                </Button>
+                <Button
+                  type="button"
+                  variant={role === "agent" ? "default" : "outline"}
+                  onClick={() => setRole("agent")}
+                  className="w-full"
+                >
+                  Agent
+                </Button>
+              </div>
+            </div>
             <Button type="submit" className="w-full" size="lg">
               Sign In
             </Button>

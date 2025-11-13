@@ -258,10 +258,10 @@ export default function ActivitiesPage() {
                     </div>
                     
                     <div className="grid grid-cols-3 gap-4">
-                      <div className="flex items-center gap-2 bg-blue-50 p-3 rounded">
-                        <UserCheck className="h-5 w-5 text-blue-600" />
+                      <div className="flex items-center gap-2 bg-[#FDE4D4] p-3 rounded">
+                        <UserCheck className="h-5 w-5 text-[#F9622C]" />
                         <div>
-                          <div className="text-2xl font-bold text-blue-600">{log.peopleMet}</div>
+                          <div className="text-2xl font-bold text-[#F9622C]">{log.peopleMet}</div>
                           <div className="text-xs text-muted-foreground">People Met</div>
                         </div>
                       </div>

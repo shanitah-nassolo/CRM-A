@@ -5,8 +5,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 import { LayoutDashboard, Users, FileText, Settings, Target, Plus, Search } from "lucide-react";
-import { mockLeads } from "@/lib/mockData";
+import { useRouter } from "next/navigation";
+import { mockLeads, mockAgents, type Lead } from "@/lib/mockData";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 const adminLinks = [
   { label: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
@@ -17,7 +36,7 @@ const adminLinks = [
 ];
 
 const statusColors = {
-  new: "bg-blue-100 text-blue-700 border-blue-300",
+  new: "bg-[#FDE4D4] text-[#F9622C] border-[#F9622C]",
   contacted: "bg-yellow-100 text-yellow-700 border-yellow-300",
   qualified: "bg-purple-100 text-purple-700 border-purple-300",
   converted: "bg-green-100 text-green-700 border-green-300",
@@ -25,6 +44,35 @@ const statusColors = {
 };
 
 export default function LeadsPage() {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [leads, setLeads] = useState<Lead[]>(mockLeads);
+  const [form, setForm] = useState({ name: "", email: "", phone: "", company: "", value: "", assignedTo: "", status: "new" });
+
+  const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  function resetForm() {
+    setForm({ name: "", email: "", phone: "", company: "", value: "", assignedTo: "", status: "new" });
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const newLead: Lead = {
+      id: String(Date.now()),
+      name: form.name || "Untitled Lead",
+      email: form.email || "",
+      phone: form.phone || "",
+      company: form.company || "",
+      status: form.status as Lead["status"],
+      value: Number(form.value) || 0,
+      assignedTo: form.assignedTo || "Unassigned",
+      createdAt: new Date().toISOString().slice(0, 10),
+    };
+    setLeads((s) => [newLead, ...s]);
+    setOpen(false);
+    resetForm();
+  }
+
   return (
     <DashboardLayout links={adminLinks} title="Admin Panel" showLogout={true}>
       <div className="space-y-8">
@@ -33,10 +81,87 @@ export default function LeadsPage() {
             <h1 className="text-4xl font-bold text-foreground">Leads Management</h1>
             <p className="text-muted-foreground mt-2">Track and manage all your leads</p>
           </div>
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
-            Add New Lead
-          </Button>
+          <div>
+            <Button className="gap-2" onClick={() => setOpen(true)}>
+              <Plus className="h-4 w-4" />
+              Add New Lead
+            </Button>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Lead</DialogTitle>
+                  <DialogDescription>Fill out the form to create a new lead.</DialogDescription>
+                </DialogHeader>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex flex-col">
+                      <Label className="mb-2">Name</Label>
+                      <Input value={form.name} onChange={(e) => update("name", e.target.value)} required className="w-full" />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <Label className="mb-2">Company</Label>
+                      <Input value={form.company} onChange={(e) => update("company", e.target.value)} className="w-full" />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <Label className="mb-2">Email</Label>
+                      <Input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} className="w-full" />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <Label className="mb-2">Phone</Label>
+                      <Input value={form.phone} onChange={(e) => update("phone", e.target.value)} className="w-full" />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <Label className="mb-2">Estimated Value</Label>
+                      <Input type="number" value={form.value} onChange={(e) => update("value", e.target.value)} className="w-full" />
+                    </div>
+
+                    <div className="flex flex-col">
+                      <Label className="mb-2">Assigned To</Label>
+                      <Select onValueChange={(v) => update("assignedTo", v)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Unassigned" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mockAgents.map((a) => (
+                            <SelectItem key={a.id} value={a.name}>{a.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <Label className="mb-2">Status</Label>
+                      <Select onValueChange={(v) => update("status", v)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="New" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="new">New</SelectItem>
+                          <SelectItem value="contacted">Contacted</SelectItem>
+                          <SelectItem value="qualified">Qualified</SelectItem>
+                          <SelectItem value="converted">Converted</SelectItem>
+                          <SelectItem value="lost">Lost</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button type="submit">Create Lead</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         {/* Search and Filter */}
@@ -106,7 +231,7 @@ export default function LeadsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {mockLeads.map((lead) => (
+                  {leads.map((lead) => (
                     <tr key={lead.id} className="border-b last:border-0">
                       <td className="py-4">
                         <div className="font-medium">{lead.name}</div>
@@ -126,7 +251,13 @@ export default function LeadsPage() {
                       </td>
                       <td className="py-4 text-muted-foreground">{lead.assignedTo}</td>
                       <td className="py-4">
-                        <Button variant="ghost" size="sm">View</Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => router.push(`/admin/leads/${lead.id}`)}
+                        >
+                          View
+                        </Button>
                       </td>
                     </tr>
                   ))}

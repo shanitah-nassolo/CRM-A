@@ -5,8 +5,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { LayoutDashboard, Briefcase, Users, FileText, Plus, DollarSign, ClipboardList } from "lucide-react";
-import { mockDeals } from "@/lib/mockData";
+import { useState } from "react";
+import { mockDeals, type Deal } from "@/lib/mockData";
 
 const agentLinks = [
   { label: "Dashboard", href: "/agent/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
@@ -24,7 +36,39 @@ const statusColors = {
 };
 
 export default function DealsPage() {
-  const myDeals = mockDeals.filter(deal => deal.agentId === "1");
+  const [open, setOpen] = useState(false);
+  const [deals, setDeals] = useState<Deal[]>(mockDeals.filter(deal => deal.agentId === "1"));
+  const [form, setForm] = useState({
+    title: "",
+    client: "",
+    value: "0",
+    status: "negotiation" as const,
+    probability: "50",
+  });
+
+  const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  function resetForm() {
+    setForm({ title: "", client: "", value: "0", status: "negotiation", probability: "50" });
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const newDeal: Deal = {
+      id: String(Date.now()),
+      title: form.title || "New Deal",
+      client: form.client || "Unknown Client",
+      value: Number(form.value) || 0,
+      status: form.status,
+      probability: Number(form.probability) || 50,
+      agentId: "1",
+    };
+    setDeals((s) => [newDeal, ...s]);
+    setOpen(false);
+    resetForm();
+  }
+
+  const myDeals = deals;
   const totalValue = myDeals.reduce((sum, deal) => sum + deal.value, 0);
   const closedValue = myDeals.filter(d => d.status === "closed").reduce((sum, deal) => sum + deal.value, 0);
 
@@ -36,10 +80,56 @@ export default function DealsPage() {
             <h1 className="text-4xl font-bold text-foreground">My Deals</h1>
             <p className="text-muted-foreground mt-2">Manage your sales pipeline</p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2" onClick={() => setOpen(true)}>
             <Plus className="h-4 w-4" />
             New Deal
           </Button>
+
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New Deal</DialogTitle>
+                <DialogDescription>Add a new deal to your pipeline</DialogDescription>
+              </DialogHeader>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col">
+                    <Label className="mb-2">Deal Title</Label>
+                    <Input value={form.title} onChange={(e) => update("title", e.target.value)} placeholder="e.g., Enterprise Software License" required />
+                  </div>
+                  <div className="flex flex-col">
+                    <Label className="mb-2">Client Name</Label>
+                    <Input value={form.client} onChange={(e) => update("client", e.target.value)} placeholder="e.g., Acme Corp" required />
+                  </div>
+                  <div className="flex flex-col">
+                    <Label className="mb-2">Deal Value</Label>
+                    <Input type="number" value={form.value} onChange={(e) => update("value", e.target.value)} placeholder="0" min="0" />
+                  </div>
+                  <div className="flex flex-col">
+                    <Label className="mb-2">Probability (%)</Label>
+                    <Input type="number" value={form.probability} onChange={(e) => update("probability", e.target.value)} placeholder="50" min="0" max="100" />
+                  </div>
+                  <div className="flex flex-col md:col-span-2">
+                    <Label className="mb-2">Status</Label>
+                    <select className="border-input rounded-md px-3 py-2" value={form.status} onChange={(e) => update("status", e.target.value)}>
+                      <option value="negotiation">Negotiation</option>
+                      <option value="proposal">Proposal</option>
+                      <option value="closed">Closed</option>
+                      <option value="lost">Lost</option>
+                    </select>
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button type="submit">Create Deal</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Pipeline Summary */}

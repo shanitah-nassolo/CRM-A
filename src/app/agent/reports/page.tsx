@@ -1,8 +1,20 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { LayoutDashboard, Briefcase, Users, FileText, Download, TrendingUp, Target, Award, Calendar, ClipboardList } from "lucide-react";
 import { Line, LineChart, Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
@@ -31,6 +43,66 @@ const activityMetrics = [
 ];
 
 export default function AgentReportsPage() {
+  const [dateRangeOpen, setDateRangeOpen] = useState(false);
+  const [dateRange, setDateRange] = useState({
+    startDate: "2024-01-01",
+    endDate: new Date().toISOString().slice(0, 10),
+  });
+  const [tempDateRange, setTempDateRange] = useState(dateRange);
+
+  const handleApplyDateRange = () => {
+    setDateRange(tempDateRange);
+    setDateRangeOpen(false);
+  };
+
+  const handleDateChange = (field: "startDate" | "endDate", value: string) => {
+    setTempDateRange((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleExport = useCallback(() => {
+    try {
+      const now = new Date();
+      const stamp = now.toISOString().replace(/[:]/g, "-").slice(0, 19);
+      const filename = `agent-report-${stamp}.csv`;
+
+      const lines: string[] = [];
+
+      const pushSection = (title: string, headers: string[], rows: any[]) => {
+        lines.push(`"${title}"`);
+        lines.push(headers.map(h => `"${h.replace(/"/g, '""')}"`).join(","));
+        rows.forEach(r => {
+          const line = headers
+            .map(h => {
+              const key = h.toLowerCase().replace(/\s+/g, "");
+              const findKey = Object.keys(r).find(k => k.toLowerCase() === key);
+              const val = (r[key] ?? r[h.toLowerCase()] ?? (findKey ? (r as any)[findKey] : undefined) ?? "") as any;
+              return String(val).replace(/"/g, '""');
+            })
+            .map(v => `"${v}"`)
+            .join(",");
+          lines.push(line);
+        });
+        lines.push("");
+      };
+
+      // Performance data
+      pushSection("Personal Performance", ["Month", "Sales", "Target", "Calls"], personalPerformanceData);
+      pushSection("Activity Metrics", ["Activity", "Count"], activityMetrics);
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      // fail silently
+    }
+  }, []);
+
   return (
     <DashboardLayout links={agentLinks} title="Sales Agent" showLogout={true}>
       <div className="space-y-8">
@@ -40,11 +112,18 @@ export default function AgentReportsPage() {
             <p className="text-muted-foreground mt-2">Personal performance analytics</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="gap-2">
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => {
+                setTempDateRange(dateRange);
+                setDateRangeOpen(true);
+              }}
+            >
               <Calendar className="h-4 w-4" />
               Date Range
             </Button>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={handleExport}>
               <Download className="h-4 w-4" />
               Export
             </Button>
@@ -53,55 +132,55 @@ export default function AgentReportsPage() {
 
         {/* Performance Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+          <Card className="bg-white border-l-4 border-l-[#F9622C]">
             <CardHeader>
-              <CardTitle className="text-white/90 text-sm flex items-center gap-2">
+              <CardTitle className="text-[#F9622C] text-sm flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
                 Total Revenue
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">$291K</div>
-              <p className="text-sm text-white/80 mt-1">+18% from last period</p>
+              <div className="text-3xl font-bold text-foreground">$291K</div>
+              <p className="text-sm text-muted-foreground mt-1">+18% from last period</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white">
+          <Card className="bg-white border-l-4 border-l-green-500">
             <CardHeader>
-              <CardTitle className="text-white/90 text-sm flex items-center gap-2">
+              <CardTitle className="text-green-600 text-sm flex items-center gap-2">
                 <Target className="h-4 w-4" />
                 Target Achievement
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">108%</div>
-              <p className="text-sm text-white/80 mt-1">Above target</p>
+              <div className="text-3xl font-bold text-foreground">108%</div>
+              <p className="text-sm text-muted-foreground mt-1">Above target</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#F9622C] to-[#FF7F50] text-white">
+          <Card className="bg-white border-l-4 border-l-slate-500">
             <CardHeader>
-              <CardTitle className="text-white/90 text-sm flex items-center gap-2">
+              <CardTitle className="text-slate-600 text-sm flex items-center gap-2">
                 <Briefcase className="h-4 w-4" />
                 Deals Closed
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">24</div>
-              <p className="text-sm text-white/80 mt-1">This period</p>
+              <div className="text-3xl font-bold text-foreground">24</div>
+              <p className="text-sm text-muted-foreground mt-1">This period</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#F9622C] to-[#FF7F50] text-white">
+          <Card className="bg-white border-l-4 border-l-[#F9622C]">
             <CardHeader>
-              <CardTitle className="text-white/90 text-sm flex items-center gap-2">
+              <CardTitle className="text-[#F9622C] text-sm flex items-center gap-2">
                 <Award className="h-4 w-4" />
                 Performance Rating
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">4.8/5.0</div>
-              <p className="text-sm text-white/80 mt-1">Excellent</p>
+              <div className="text-3xl font-bold text-foreground">4.8/5.0</div>
+              <p className="text-sm text-muted-foreground mt-1">Excellent</p>
             </CardContent>
           </Card>
         </div>
@@ -216,51 +295,46 @@ export default function AgentReportsPage() {
           </CardContent>
         </Card>
 
-        {/* Key Insights */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Key Insights & Recommendations</CardTitle>
-          </CardHeader>
-          <CardContent>
+        {/* Date Range Dialog */}
+        <Dialog open={dateRangeOpen} onOpenChange={setDateRangeOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Select Date Range</DialogTitle>
+              <DialogDescription>Choose the date range for your report.</DialogDescription>
+            </DialogHeader>
             <div className="space-y-4">
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <div className="text-2xl">✅</div>
-                  <div>
-                    <div className="font-semibold text-green-900">Exceeding Targets</div>
-                    <p className="text-sm text-green-700 mt-1">
-                      You've exceeded your sales targets for 5 out of 6 months. Keep up the excellent work!
-                    </p>
-                  </div>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="start-date">Start Date</Label>
+                <Input
+                  id="start-date"
+                  type="date"
+                  value={tempDateRange.startDate}
+                  onChange={(e) => handleDateChange("startDate", e.target.value)}
+                />
               </div>
-
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <div className="text-2xl">📈</div>
-                  <div>
-                    <div className="font-semibold text-blue-900">Growing Call Activity</div>
-                    <p className="text-sm text-blue-700 mt-1">
-                      Your call activity has increased by 15% over the past 6 months, showing consistent engagement.
-                    </p>
-                  </div>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="end-date">End Date</Label>
+                <Input
+                  id="end-date"
+                  type="date"
+                  value={tempDateRange.endDate}
+                  onChange={(e) => handleDateChange("endDate", e.target.value)}
+                />
               </div>
-
-              <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <div className="text-2xl">🎯</div>
-                  <div>
-                    <div className="font-semibold text-purple-900">High Win Rate</div>
-                    <p className="text-sm text-purple-700 mt-1">
-                      Your 75% win rate is significantly above the company average of 60%.
-                    </p>
-                  </div>
-                </div>
+              <div className="text-sm text-muted-foreground">
+                Selected Range: <span className="font-semibold">{tempDateRange.startDate}</span> to <span className="font-semibold">{tempDateRange.endDate}</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button onClick={handleApplyDateRange} className="bg-[#F9622C] hover:bg-[#E85A24]">
+                Apply
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );

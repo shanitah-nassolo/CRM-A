@@ -47,13 +47,14 @@ export default function AgentDashboard() {
         </div>
 
         {/* Performance Rating Card */}
-        <Card className="relative overflow-hidden">
+        <Card className="relative overflow-hidden border-l-4 border-l-[#F9622C] bg-white">
+          <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#F9622C] to-transparent opacity-50"></div>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[#F9622C] mb-2 font-medium">Your Performance Rating</p>
                 <div className="flex items-center gap-3">
-                  <div className="text-5xl font-bold">{myRating}</div>
+                  <div className="text-5xl font-bold text-foreground">{myRating}</div>
                   <div>
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -62,16 +63,16 @@ export default function AgentDashboard() {
                           className={`h-6 w-6 ${
                             star <= Math.floor(myRating)
                               ? "fill-yellow-400 text-yellow-400"
-                              : "text-white/40"
+                              : "text-gray-300"
                           }`}
                         />
                       ))}
                     </div>
-                    <p className="text-sm text-white/80 mt-1">Excellent Performance!</p>
+                    <p className="text-sm text-muted-foreground mt-1">Excellent Performance!</p>
                   </div>
                 </div>
               </div>
-              <Award className="h-24 w-24 text-white/20" />
+              <Award className="h-24 w-24 text-[#F9622C]/20" />
             </div>
           </CardContent>
         </Card>
@@ -203,35 +204,6 @@ export default function AgentDashboard() {
                   </div>
                 </div>
               ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Achievements */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-primary" />
-              Recent Achievements
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                <div className="text-3xl mb-2">🏆</div>
-                <div className="font-semibold">Top Performer</div>
-                <div className="text-xs text-muted-foreground mt-1">Achieved this month</div>
-              </div>
-              <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="text-3xl mb-2">🎯</div>
-                <div className="font-semibold">Target Achieved</div>
-                <div className="text-xs text-muted-foreground mt-1">100% quota met</div>
-              </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                <div className="text-3xl mb-2">⭐</div>
-                <div className="font-semibold">5-Star Rating</div>
-                <div className="text-xs text-muted-foreground mt-1">Customer satisfaction</div>
-              </div>
             </div>
           </CardContent>
         </Card>
