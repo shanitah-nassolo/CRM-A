@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Building2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface SidebarLink {
@@ -31,7 +31,8 @@ export default function Sidebar({ links, title, showLogout = false }: SidebarPro
       {/* Header */}
       <div className="p-6 border-b border-primary-foreground/20">
         <div className="flex items-center gap-3">
-          <Building2 className="h-8 w-8" />
+          {/* Replace the default icon with the provided logo image (place img img new.jpeg in public/) */}
+          <img src="/img new.jpeg" alt="CRM logo" className="h-8 w-8 rounded-sm object-cover" />
           <div>
             <h1 className="text-xl font-bold">CRM System</h1>
             <p className="text-sm opacity-80">{title}</p>

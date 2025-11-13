@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Building2 } from "lucide-react";
+// logo replaced with /img new.jpeg (place img new.jpeg in the project's public/ folder)
 import {
   Dialog,
   DialogContent,
@@ -48,8 +48,8 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
-            <div className="bg-primary p-4 rounded-full">
-              <Building2 className="h-10 w-10 text-primary-foreground" />
+            <div className="bg-primary p-3 rounded-full">
+              <img src="/img new.jpeg" alt="CRM logo" className="h-10 w-10 rounded-sm object-cover" />
             </div>
           </div>
           <CardTitle className="text-3xl font-bold">CRM System</CardTitle>
@@ -101,33 +101,7 @@ export default function LoginPage() {
                 Forgot password?
               </button>
             </div>
-            <div className="space-y-2">
-              <Label>Select Role</Label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setRole("admin")}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    role === "admin"
-                      ? "border-primary bg-primary/10 text-primary font-semibold"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                >
-                  Admin
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole("agent")}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    role === "agent"
-                      ? "border-primary bg-primary/10 text-primary font-semibold"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                >
-                  Sales Agent
-                </button>
-              </div>
-            </div>
+            {/* Role selection removed - default role remains 'admin' */}
             <Button type="submit" className="w-full" size="lg">
               Sign In
             </Button>
